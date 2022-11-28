@@ -1,5 +1,5 @@
 import * as express from 'express';
-import router from './routes/UserRouter';
+import UserRouter from './routes/UserRouter';
 // req 3 concluido com ajuda de Marcelo Marques, Eliel Oliveira e Isabelly Vieira
 
 class App {
@@ -24,7 +24,7 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    this.app.use('/', router);
+    this.app.use('/', UserRouter);
   }
 
   public start(PORT: string | number):void {
