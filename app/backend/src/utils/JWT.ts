@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import * as JWT from 'jsonwebtoken';
+import { IToken } from '../Interfaces/IToken';
 import { ILogin } from '../Interfaces/ILogin';
 
 export default class TokenJWT {
@@ -12,5 +13,11 @@ export default class TokenJWT {
     });
 
     return token;
+  };
+
+  validateToken = (authorization: string) => {
+    const data = JWT.verify(authorization, this._secret);
+    const { email } = data as IToken;
+    return email;
   };
 }

@@ -36,4 +36,11 @@ export default class UserService {
     const token = this._JWT.createToken(login);
     return { status: 200, message: { token } };
   };
+
+  getLogin = async (authorization: string) => {
+    const email = this._JWT.validateToken(authorization);
+    const data = await this._userModel.findOne({ where: { email } });
+
+    return { status: 200, message: { role: data!.role } };
+  };
 }
