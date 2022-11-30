@@ -5,8 +5,14 @@ export default class UserService {
     private _teamModel = Team,
   ) {}
 
-  getLogin = async () => {
+  getTeam = async () => {
     const data = await this._teamModel.findAll();
+
+    return { status: 200, message: data };
+  };
+
+  getTeamId = async (id: string) => {
+    const data = await this._teamModel.findOne({ where: { id } });
 
     return { status: 200, message: data };
   };
