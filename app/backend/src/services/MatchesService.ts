@@ -16,4 +16,17 @@ export default class UserService {
 
     return { status: 200, message: data };
   };
+
+  getQuery = async (value: string) => {
+    const inProgress = value === 'true';
+
+    const data = await this._matchModel.findAll({
+      where: { inProgress },
+      include: [
+        { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+      ],
+    });
+    return { status: 200, message: data };
+  };
 }
