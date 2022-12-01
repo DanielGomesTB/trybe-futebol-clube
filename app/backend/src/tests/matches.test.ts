@@ -2,7 +2,6 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-import Team from '../database/models/Team';
 
 import App from '../app';
 
@@ -14,41 +13,22 @@ const { app } = new App();
 
 const { expect } = chai;
 
-const retornoTeamsId = {
-    "id": 1,
-    "teamName": "Avaí/Kindermann"
-  }
-
-
-describe('Testes teams', () => {
+describe('Testes matches', () => {
   /**
    * Exemplo do uso de stubs com tipos
    */
 
   let chaiHttpResponse: Response;
 
-  beforeEach(async () => {
-    sinon
-      .stub(Team, "findOne")
-      .resolves({
-        ...retornoTeamsId
-      } as Team);
-  });
-
-  afterEach(()=>{
-    (Team.findOne as sinon.SinonStub).restore();
-  })
-
   it('testa retorno da rota teams id', async () => {
     chaiHttpResponse = await chai
-       .request(app).get('/teams/1')
+       .request(app).get('/matches')
 
     expect(chaiHttpResponse.ok).to.be.equal(true)
-    expect(chaiHttpResponse.body).to.deep.equal(retornoTeamsId)
   });
 
   it('testa retorno da rota teams', async () => {
-    const response = await chai.request(app).get('/teams')
+    const response = await chai.request(app).get('/matches?inProgress=true')
 
     expect(response.status).to.be.equal(200)
   });

@@ -5,62 +5,17 @@ import * as bcrypt from 'bcryptjs'
 import chaiHttp = require('chai-http');
 import User from '../database/models/User';
 import App from '../app';
-import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
 
 chai.use(chaiHttp);
 
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInBhc3N3b3JkIjoic2VjcmV0X2FkbWluIiwiaWF0IjoxNjY5OTM3MTA3LCJleHAiOjE2NzAwMjM1MDd9.iDQE2D_FLJlA6ILpnDRro01dC-Drc63kNOl57aZ8x18'
+
 const { app } = new App();
 
 const { expect } = chai;
-// const mochUser = {
-//   id: 1, 
-//   username: 'Jhonson',
-//   role: 'admin',
-//   email: 'jhonson@admin.com',
-//   password: 'jhonsonadmin',
-// }
-
-// const mochLogin = {
-//   email: 'jhonson@admin.com',
-//   password: 'jhonsonadmin',
-// }
-
 describe('Testes user', () => {
-  /**
-   * Exemplo do uso de stubs com tipos
-   */
-
-  //  let chaiHttpResponse: Response;
-
-  // beforeEach(async () => {
-  //   sinon
-  //     .stub(User, "findOne")
-  //     .resolves(mochUser as User);
-  // });
-
-  // afterEach(sinon.restore)
-
-
-  // it('teste validade true', async () => {
-  //   sinon.stub(bcrypt, 'compareSync').returns(true)
-  //   chaiHttpResponse = await chai
-  //      .request(app).post('/login').send(mochLogin)
-
-  //   expect(chaiHttpResponse.ok).to.be.equal(true)
-  // });
-
-  // it('teste validade false', async () => {
-  //   sinon.stub(bcrypt, 'compareSync').returns(false)
-  //   chaiHttpResponse = await chai
-  //      .request(app).post('/login').send({
-  //       email: mochLogin.email,
-  //       password: '11111111111',
-  //     })
-
-  //   expect(chaiHttpResponse.status).to.be.equal(401)
-  // });
 
   it('testa cadastro com dados corretos', async () => {
     const response = await chai.request(app).post('/login').send({
@@ -76,5 +31,21 @@ describe('Testes user', () => {
     })
 
     expect(response.status).to.be.equal(400)
+  });
+
+  it('testa cadastro com dados errados', async () => {
+    const response = await chai.request(app).post('/login').send({
+      email: 'admin@admin.com', password: '11111',
+    })
+
+    expect(response.status).to.be.equal(401)
+  });
+
+  it('testa get', async () => {
+    const response = await chai.request(app).get('/login/validate').set(
+      'authorization', token
+    )
+
+    expect(response.status).to.be.equal(200)
   });
 });
