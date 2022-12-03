@@ -18,6 +18,7 @@ export default class TokenJWT {
 
   validateToken = (authorization: string) => {
     const data = JWT.verify(authorization, this._secret);
+    console.log(data);
     const { email } = data as IToken;
     return email;
   };
@@ -31,7 +32,7 @@ export default class TokenJWT {
         return res.status(401).json({ message: 'Unauthorized' });
       }
     } catch (error) {
-      console.log(error);
+      return res.status(401).json({ message: 'Token must be a valid token' });
     }
     next();
   };
