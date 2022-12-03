@@ -52,9 +52,18 @@ export default class MatchesService {
   };
 
   patchMatch = async (id: string) => {
-    const data = await this._matchModel.findOne({ where: { id } });
-    data!.set({ inProgress: false });
-    await data!.save();
+    await this._matchModel.update(
+      { inProgress: false },
+      { where: { id } },
+    );
     return { status: 200, message: { message: 'finished' } };
+  };
+
+  inGameMatch = async (id: string, homeTeamGoals: string, awayTeamGoals: string) => {
+    await this._matchModel.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
+    return { status: 200, message: { message: 'updated' } };
   };
 }

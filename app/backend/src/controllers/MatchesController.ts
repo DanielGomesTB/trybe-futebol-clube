@@ -31,4 +31,12 @@ export default class MatchesController {
     const { status, message } = result;
     res.status(status).json(message);
   };
+
+  inGameMatch = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const result = await this._service.inGameMatch(id, homeTeamGoals, awayTeamGoals);
+    const { status, message } = result;
+    res.status(status).json(message);
+  };
 }

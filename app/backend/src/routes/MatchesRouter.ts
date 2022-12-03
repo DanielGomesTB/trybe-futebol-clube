@@ -8,6 +8,7 @@ const authorizationToken = new TokenJWT();
 
 router.get('/matches', matchesController.getMatch);
 router.post('/matches', authorizationToken.authorization, matchesController.postMatch);
+router.patch('/matches/:id', matchesController.inGameMatch);
 router.patch('/matches/:id/finish', matchesController.patchMatch);
 
 export default router;
