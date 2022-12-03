@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import MatchesService from '../services/MatchesService';
 
-export default class TeamController {
+export default class MatchesController {
   constructor(
     private _service = new MatchesService(),
   ) {}
@@ -16,6 +16,12 @@ export default class TeamController {
     }
     const data = await this._service.getMatch();
     const { status, message } = data;
+    res.status(status).json(message);
+  };
+
+  postMatch = async (req: Request, res: Response) => {
+    const result = await this._service.postMatch(req.body);
+    const { status, message } = result;
     res.status(status).json(message);
   };
 }

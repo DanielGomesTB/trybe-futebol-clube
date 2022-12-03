@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import * as JWT from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 import { IToken } from '../Interfaces/IToken';
 import { ILogin } from '../Interfaces/ILogin';
 
@@ -19,5 +20,19 @@ export default class TokenJWT {
     const data = JWT.verify(authorization, this._secret);
     const { email } = data as IToken;
     return email;
+  };
+
+  // feito com ajuda de Marcelo Marques
+  authorization = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { authorization } = req.headers;
+      const data = JWT.verify(authorization as string, this._secret);
+      if (!data) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    next();
   };
 }
