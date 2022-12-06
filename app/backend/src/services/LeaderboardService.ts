@@ -27,7 +27,9 @@ export default class LeaderboardService {
       if (inicialValue.goalsFavor === inicialValue.goalsOwn) {
         inicialValue.draws += 1;
       }
-      if (inicialValue.goalsFavor === inicialValue.goalsOwn) { inicialValue.losses += 1; }
+      if (inicialValue.goalsFavor < inicialValue.goalsOwn) {
+        inicialValue.losses += 1;
+      }
     });
     const { goalsFavor, goalsOwn, draws, losses, victories } = inicialValue;
     const goalsBalance = inicialValue.goalsFavor - inicialValue.goalsOwn;
@@ -93,20 +95,13 @@ export default class LeaderboardService {
   getLeaderboard = async () => {
     const matches = await this.getFinishedMatches();
     const teams = await this.getTeams();
+    this._leaderboard = [];
     await this.teamGrouping(matches, teams);
-    const table = this._leaderboard.sort((a: IStatus, b: IStatus) => {
-      if (
-        a.totalPoints > b.totalPoints
-        || a.goalsFavor > b.goalsFavor
-        || a.goalsBalance > b.goalsBalance
-      ) { return -1; }
-      if (
-        a.totalPoints < b.totalPoints
-        || a.goalsFavor < b.goalsFavor
-        || a.goalsBalance < b.goalsBalance
-      ) { return 1; }
-      return 0;
-    });
-    return { status: 200, message: table };
+    this._leaderboard.sort((a, b) => b.totalPoints - a.totalPoints
+        || b.totalVictories - a.totalVictories
+        || b.goalsBalance - a.goalsBalance
+        || b.goalsFavor - a.goalsFavor
+        || a.goalsOwn - b.goalsOwn);
+    return { status: 200, message: this._leaderboard };
   };
 }
