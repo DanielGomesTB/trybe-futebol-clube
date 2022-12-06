@@ -18,7 +18,6 @@ export default class TokenJWT {
 
   validateToken = (authorization: string) => {
     const data = JWT.verify(authorization, this._secret);
-    console.log(data);
     const { email } = data as IToken;
     return email;
   };
