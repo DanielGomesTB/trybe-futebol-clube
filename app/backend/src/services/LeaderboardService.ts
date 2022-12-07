@@ -21,14 +21,14 @@ export default class LeaderboardService {
     matches.forEach((match) => {
       inicialValue.goalsFavor += match.homeTeamGoals;
       inicialValue.goalsOwn += match.awayTeamGoals;
-      if (inicialValue.goalsFavor > inicialValue.goalsOwn) {
+      if (match.homeTeamGoals < match.awayTeamGoals) {
+        inicialValue.losses += 1;
+      }
+      if (match.homeTeamGoals > match.awayTeamGoals) {
         inicialValue.victories += 1;
       }
-      if (inicialValue.goalsFavor === inicialValue.goalsOwn) {
+      if (match.homeTeamGoals === match.awayTeamGoals) {
         inicialValue.draws += 1;
-      }
-      if (inicialValue.goalsFavor < inicialValue.goalsOwn) {
-        inicialValue.losses += 1;
       }
     });
     const { goalsFavor, goalsOwn, draws, losses, victories } = inicialValue;
@@ -92,6 +92,7 @@ export default class LeaderboardService {
   };
   /// ///////////////////////////////////////////////////////////////////////////////////////
 
+  // parte do sort feita com ajud de Eliel e Marcelo
   getLeaderboard = async () => {
     const matches = await this.getFinishedMatches();
     const teams = await this.getTeams();
